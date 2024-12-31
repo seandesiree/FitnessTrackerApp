@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import NavBar from './NavBar';
-import Home from './Home';
-import Exercises from './Exercises';
+import NavBar from './components/NavBar';
+import Home from './components/Home';
+import Exercises from './components/Exercises';
+import { Provider } from 'react-redux';
+import { store } from './reducers/store'
 
 const App = () => (
+  <Provider store={store}> 
   <Router>
     <div>
       <NavBar />
@@ -14,6 +17,7 @@ const App = () => (
       </Routes>
     </div>
   </Router>
+  </Provider>
 );
 
 export default App;

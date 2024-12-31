@@ -1,19 +1,20 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {exercises: []}
 const exerciseSlice = createSlice({
   name: 'exercises',
-  initialState: [],
+  initialState,
   reducers: {
     addExercise: (state, action) => {
-      state.push(action.payload);
+      state.exercises.push(action.payload);
     },
     deleteExercise: (state, action) => {
-      return state.filter((_, index) => index !== action.payload);
+      return state.exercises.filter((_, index) => index !== action.payload);
     },
     updateExercise: (state, action) => {
       const { index, newData } = action.payload;
-      state[index] = newData;
+      state.exercises[index] = newData;
     },
   },
 });

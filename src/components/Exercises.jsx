@@ -1,22 +1,35 @@
 import React, { useState } from 'react';
-import { deleteExercise, updateExercise } from './exerciseSlice';
+import { deleteExercise, updateExercise, addExercise } from '../reducers/exerciseSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Exercises = () => {
 
-  const [updateData, setUpdateData] = useState({
+  const [newExercise, setNewExercise, updateData, setUpdateData] = useState({
     index: null,
     type: '',
     duration: '',
     calories: ''
   });
 
+  const dispatch = useDispatch()
+  const exercises = useSelector((state) => state.exercises.exercises)
+
+  const handleNewExerciseChange = (e) => {
+    setNewExercise({ ...newExercise, [e.target.name]: e.target.value });
+  };
   const handleUpdateChange = (e) => {
     setUpdateData({ ...updateData, [e.target.name]: e.target.value });
   };
 
   const startUpdate = (index) => {
-    const exercise = Exercises[index];
+    const exercise = exercises[index];
     setUpdateData({ index, ...exercise });
+  };
+
+  const handleAddSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addExercise(newExercise));
+    setNewExercise({ type: '', duration: '', calories: '' });
   };
 
   const handleUpdateSubmit = (e) => {
@@ -25,13 +38,38 @@ const Exercises = () => {
     setUpdateData({ index: null, type: '', duration: '', calories: '' });
   };
 
+  
+
   return (
     <div>
       <h2>Exercise Log</h2>
-      ... // Existing add exercise form
+      <form onSubmit={handleAddSubmit}>
+        <input
+          type="text"
+          name="type"
+          placeholder="Exercise Type"
+          value={newExercise.type}
+          onChange={handleNewExerciseChange}
+        />
+        <input
+          type="number"
+          name="duration"
+          placeholder="Duration (mins)"
+          value={newExercise.duration}
+          onChange={handleNewExerciseChange}
+        />
+        <input
+          type="number"
+          name="calories"
+          placeholder="Calories Burned"
+          value={newExercise.calories}
+          onChange={handleNewExerciseChange}
+        />
+        <button type="submit">Add Exercise</button>
+      </form>
 
       <ul>
-        {Exercises.map((exercise, index) => (
+        {exercises.map((exercise, index) => (
           <li key={index}>
             {exercise.type} - {exercise.duration} mins - {exercise.calories} kcal
             <button onClick={() => dispatch(deleteExercise(index))}>Delete</button>
